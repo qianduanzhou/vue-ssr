@@ -12,6 +12,7 @@ export default {
   computed: {
     // 从 store 的 state 对象中的获取 item。
     item () {
+      
       return this.$store.state.items[this.$route.params.id]
     }
   }
