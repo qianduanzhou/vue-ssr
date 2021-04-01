@@ -1,24 +1,24 @@
 const Vue = require('vue')
 const server = require('express')()
 const path = require('path')
-
+const resolve = file => path.resolve(__dirname, file)
 const { createBundleRenderer } = require('vue-server-renderer')
 
-const template = require('fs').readFileSync(path.join(__dirname + '/index.template.html'), 'utf-8')
-const serverBundle = require('/dist/vue-ssr-server-bundle.json')
-const clientManifest = require('/dist/vue-ssr-client-manifest.json')
+const template = require('fs').readFileSync(resolve('./index.template.html'), 'utf-8')
+const serverBundle = require(resolve('../dist/vue-ssr-server-bundle.json'))
+const clientManifest = require(resolve('../dist/vue-ssr-client-manifest.json'))
 
 const renderer = createBundleRenderer(serverBundle, {
   template,
-  clientManifest
+  clientManifest,
+  basedir: resolve('./dist')
 })
-import createApp from './app'
 server.get('*', (req, res) => {
   const context = {
     title: 'demo'
   }
-  let app = createApp(context)
-  renderer.renderToString(app, (err, html) => {
+  renderer.renderToString(context, (err, html) => {
+    console.log('err, html', 12123)
     if (err) {
       res.status(500).end('Internal Server Error')
       return
@@ -26,5 +26,6 @@ server.get('*', (req, res) => {
     res.end(html)
   })
 })
-
-server.listen(8080)
+server.listen(8080, () => {
+  console.log(`server started at localhost: 8080`)
+})
