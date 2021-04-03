@@ -3,9 +3,10 @@ const express = require('express')
 const app = express()
 const favicon = require('serve-favicon')
 const path = require('path')
-const resolve = file => path.resolve(__dirname, file)
 const { createBundleRenderer } = require('vue-server-renderer')
-const templatePath = resolve('./index.template.html')
+
+const resolve = file => path.resolve(__dirname, file)
+const templatePath = resolve('../src/index.template.html')
 const serverInfo =
   `express/${require('express/package.json').version} ` +
   `vue-server-renderer/${require('vue-server-renderer/package.json').version}`
@@ -14,6 +15,7 @@ const isProd = process.env.NODE_ENV === 'production'
 const serve = (path, cache) => express.static(resolve(path), {
   maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 30 : 0
 })
+
 let readyPromise,renderer
 if(isProd) {
   const template = require('fs').readFileSync(templatePath, 'utf-8')
@@ -71,9 +73,9 @@ function render (req, res) {
 }
 
 app.use('/dist', serve('../dist', true))
-app.use(favicon(resolve('../public/logo-48.png')))
+app.use(favicon(resolve('../public/img/logo-48.png')))
 
-app.get('*', isProd ? render(req,res) : (req, res) => {
+app.get('*', isProd ? render : (req, res) => {
   readyPromise.then(() => render(req, res))
 }
 )

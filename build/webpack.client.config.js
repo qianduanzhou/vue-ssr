@@ -1,5 +1,7 @@
 const webpack = require('webpack')
-const {merge} = require('webpack-merge')
+const {
+  merge
+} = require('webpack-merge')
 const baseConfig = require('./webpack.base.config.js')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 
@@ -10,24 +12,28 @@ module.exports = merge(baseConfig, {
   optimization: {
     splitChunks: {
       chunks: 'async',
-      minSize: 20000,
+      minSize: 30000,
+      maxSize: 0,
       minChunks: 1,
-      maxAsyncRequests: 30,
-      maxInitialRequests: 30,
-      enforceSizeThreshold: 50000,
+      maxAsyncRequests: 6,
+      maxInitialRequests: 4,
+      automaticNameDelimiter: '~',
       cacheGroups: {
-        defaultVendors: {
+        vendors: {
+          name: `chunk-vendors`,
           test: /[\\/]node_modules[\\/]/,
           priority: -10,
-          reuseExistingChunk: true,
+          chunks: 'initial'
         },
-        default: {
+        common: {
+          name: `chunk-common`,
           minChunks: 2,
           priority: -20,
-          reuseExistingChunk: true,
-        },
-      },
-    },
+          chunks: 'initial',
+          reuseExistingChunk: true
+        }
+      }
+    }
   },
   plugins: [
     // 此插件在输出目录中

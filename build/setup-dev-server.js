@@ -45,7 +45,7 @@ module.exports = function setupDevServer (app, templatePath, cb) {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin()
   )
-  console.log('clientConfig.entry.app', clientConfig.entry.app)
+
   // dev middleware
   const clientCompiler = webpack(clientConfig)
 

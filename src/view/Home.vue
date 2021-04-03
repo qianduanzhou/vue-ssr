@@ -1,6 +1,8 @@
 <template>
   <div class="home">
     Home
+    <img src="../static/img/logo-48.png" alt="">
+    <el-button type="success">按钮</el-button>
   </div>
 </template>
 
@@ -9,7 +11,9 @@ export default {
   components: {},
   // 定义属性
   data() {
-    return {};
+    return {
+      img: ''
+    };
   },
   // 计算属性，会监听依赖属性值随之变化
   computed: {},
@@ -31,7 +35,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less" scoped>
   .home {
     color: red;
   }
