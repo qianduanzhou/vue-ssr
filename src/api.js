@@ -3,6 +3,11 @@ const apiList = {
 }
 export function fetchItem(id) {
     return new Promise((resolve, reject) => {
-        resolve(apiList[id])
+        console.log('apiList', apiList[id])
+        if(apiList[id]) {
+            resolve(apiList[id])
+        } else {
+            reject(`id not found in apiList`)
+        } 
     })
 }
