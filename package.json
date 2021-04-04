@@ -9,6 +9,7 @@
     "build": "rimraf dist && npm run build:client && npm run build:server",
     "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.client.config.js --progress",
     "build:server": "cross-env NODE_ENV=production webpack --config build/webpack.server.config.js --progress",
+    "build:analyzer": "cross-env NODE_ENV=production ANALYZER=true webpack --config build/webpack.client.config.js --progress",
     "postinstall": "npm run build"
   },
   "author": "zhou",
@@ -46,6 +47,7 @@
     "vue-style-loader": "^4.1.3",
     "vue-template-compiler": "^2.6.12",
     "webpack": "^4.6.0",
+    "webpack-bundle-analyzer": "^4.4.0",
     "webpack-cli": "^4.6.0",
     "webpack-dev-middleware": "^1.12.0",
     "webpack-hot-middleware": "^2.25.0",
