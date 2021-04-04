@@ -1,4 +1,3 @@
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const path = require('path')
 const resolve = file => path.resolve(__dirname, file)
@@ -38,24 +37,15 @@ let config = {
 				}
 			},
 			{
-				test: /\.(css|less)$/,
-				// 重要：使用 vue-style-loader 替代 style-loader
-				use: [isProduction ? MiniCssExtractPlugin.loader : 'vue-style-loader',
-					'css-loader',
-					'postcss-loader',
-					'less-loader'
-				]
-			},
-			{
 				test: /\.(jpe?g|png|gif|svg)$/,
 				use: {
                     loader: 'url-loader',
                     options: {
-						outputPath:"assets/img",
-    					publicPath:'./img',
-                        limit: 0,
+						outputPath: 'assets/img',
+    					publicPath: '../dist/assets/img',
+                        limit: 1000,
 						esModule: false, // 这里设置为false
-						name: 'img.[name].[ext]?[hash]'
+						name: '[name].[ext]?[hash]'
                     }
                 }
 			},
@@ -75,10 +65,5 @@ let config = {
 		new VueLoaderPlugin()
 	]
 }
-if (isProduction) {
-	// 确保添加了此插件！
-	config.plugins.push(new MiniCssExtractPlugin({
-		filename: 'common.[chunkhash].css'
-	}))
-}
+
 module.exports = config

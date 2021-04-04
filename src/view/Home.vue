@@ -3,6 +3,7 @@
     Home
     <img src="../static/img/logo-48.png" alt="">
     <el-button type="success">按钮</el-button>
+    <div class="img"></div>
   </div>
 </template>
 
@@ -38,5 +39,10 @@ export default {
 <style lang="less" scoped>
   .home {
     color: red;
+    .img {
+      width: 100px;
+      height: 100px;
+      background: url('../static/img/logo-48.png')
+    }
   }
 </style>

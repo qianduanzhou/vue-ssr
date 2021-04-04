@@ -30,7 +30,19 @@ module.exports = merge(baseConfig, {
     // 你还应该将修改 `global`（例如 polyfill）的依赖模块列入白名单
     allowlist: [/\.css$/]
   }),
-
+  module: {
+    rules: [
+      {
+				test: /\.(css|less)$/,
+				// 重要：使用 vue-style-loader 替代 style-loader
+				use: ['vue-style-loader',
+					'css-loader',
+					'postcss-loader',
+					'less-loader'
+				]
+			},
+    ]
+  },
   // 这是将服务器的整个输出
   // 构建为单个 JSON 文件的插件。
   // 默认文件名为 `vue-ssr-server-bundle.json`

@@ -3,7 +3,7 @@ import App from './App.vue'
 import { createRouter } from './router'
 import { createStore } from './store'
 import { sync } from 'vuex-router-sync'
-import {Button} from 'element-ui'
+// import {Button} from 'element-ui'
 // 导出一个工厂函数，用于创建新的
 // 应用程序、router 和 store 实例
 
@@ -22,7 +22,7 @@ Vue.mixin({
   }
 })
 
-Vue.use(Button)
+// Vue.use(Button)
 export function createApp () {
   const router = createRouter()
   const store = createStore() 
