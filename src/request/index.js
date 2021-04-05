@@ -1,11 +1,13 @@
 const apiList = {
-    init: '/init'
+    init: '/init',
+    get: '/get'
 }
 export function fetchItem(id) {
     return new Promise((resolve, reject) => {
-        console.log('apiList', apiList[id])
         if(apiList[id]) {
-            resolve(apiList[id])
+            setTimeout(() => {
+                resolve(apiList[id])
+            }, 3000);
         } else {
             reject(`id not found in apiList`)
         } 

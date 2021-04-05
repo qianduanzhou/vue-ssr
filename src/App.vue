@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <router-link to="/">Home</router-link>
-    <router-link to="/item/5">Item</router-link>
+    <router-link to="/item/init">Item-init</router-link>
+    <router-link to="/item/get">Item-get</router-link>
     <router-view></router-view>
   </div>
 </template>

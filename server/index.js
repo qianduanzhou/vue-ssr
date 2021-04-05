@@ -71,7 +71,10 @@ function render (req, res) {
     title: 'Vue ssr', // default title
     url: req.url
   }
-  //vue实例挂载的内容变成html，返回给客户端
+  /**
+   * renderToString将context传递给entry-server，
+   * vue实例挂载的内容变成html，返回给客户端
+   */
   renderer.renderToString(context, (err, html) => {
     if (err) {
       return handleError(err)
@@ -83,7 +86,7 @@ function render (req, res) {
   })
 }
 
-// app.use('/dist', serve('../dist', true)) //访问/dist时访问dist目录下的文件
+app.use('/dist', serve('../dist', true)) //访问/dist时访问dist目录下的文件
 app.use(favicon(resolve('../public/img/logo-48.png')))
 
 app.get('*', isProd ? render : (req, res) => {
