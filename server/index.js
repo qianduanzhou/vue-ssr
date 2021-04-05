@@ -83,7 +83,7 @@ function render (req, res) {
   })
 }
 
-app.use('/dist', serve('../dist', true))
+// app.use('/dist', serve('../dist', true)) //访问/dist时访问dist目录下的文件
 app.use(favicon(resolve('../public/img/logo-48.png')))
 
 app.get('*', isProd ? render : (req, res) => {
