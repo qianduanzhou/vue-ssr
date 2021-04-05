@@ -2,13 +2,23 @@
  * webpack4文档：https://webpack.html.cn/
  */
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const CopyWebpackPlugin = require('copy-webpack-plugin');//文件复制
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;//打包块分析
 const path = require('path')
 const resolve = file => path.resolve(__dirname, file)
 // CSS 提取应该只用于生产环境
 // 这样我们在开发过程中仍然可以热重载
 const isProduction = process.env.NODE_ENV === 'production'
 const isAnalyzer = process.env.ANALYZER === 'true'
+
+//文件内容替换
+function replaceUrl(text) {
+	let result = ''
+	result = text.replace(/\.\.\/src\/index\.template\.html/g, '../index.template.html')
+	result = result.replace(/\.\.\/dist/g, '..')
+	return result
+}
+
 let config = {
 	//启用webpack内置的优化,有'production'和'development'两个选项，将会添加不同的plugin，具体看webpack4官方文档
 	mode: isProduction ? 'production' : 'development',
@@ -75,6 +85,24 @@ let config = {
 	plugins: [
 		new VueLoaderPlugin()//使用vue-loader必须添加到plugins里
 	]
+}
+if(isProduction) {
+	config.plugins.push(new CopyWebpackPlugin(
+		{
+			patterns: [
+				{from: resolve('../public'),to: resolve('../dist/public')},
+				{
+					from: resolve('../server'),
+					to: resolve('../dist/server'),
+					transform(content) {
+						// 修改文件的内容
+						return replaceUrl(content.toString());
+					},
+				},
+				{from: resolve('../src/index.template.html'),to: resolve('../dist')}
+			]
+		}
+	))
 }
 if(isAnalyzer) {
 	//分析打包的代码块

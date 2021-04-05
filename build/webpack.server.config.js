@@ -44,12 +44,13 @@ module.exports = merge(baseConfig, {
 			},
     ]
   },
-  // 这是将服务器的整个输出
-  // 构建为单个 JSON 文件的插件。
-  // 默认文件名为 `vue-ssr-server-bundle.json`
+
   plugins: [
-    // 此插件在输出目录中
-    // 生成 `vue-ssr-client-manifest.json`。
+    /**
+     * 这是将服务器的整个输出
+     * 构建为单个 JSON 文件的插件。
+     * 默认文件名为 `vue-ssr-server-bundle.json`
+     */
     new VueSSRServerPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),

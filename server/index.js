@@ -1,8 +1,11 @@
-const Vue = require('vue')
 const express = require('express')
 const app = express()
-const favicon = require('serve-favicon')
+const favicon = require('serve-favicon')//网页图标
 const path = require('path')
+/**
+ * 服务端渲染的关键
+ * https://ssr.vuejs.org/zh/api/
+ */
 const { createBundleRenderer } = require('vue-server-renderer')
 
 const resolve = file => path.resolve(__dirname, file)
@@ -12,6 +15,7 @@ const serverInfo =
   `vue-server-renderer/${require('vue-server-renderer/package.json').version}`
 const isProd = process.env.NODE_ENV === 'production'
 
+//静态目录配置
 const serve = (path, cache) => express.static(resolve(path), {
   maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 30 : 0
 })
@@ -21,9 +25,15 @@ if(isProd) {
   const template = require('fs').readFileSync(templatePath, 'utf-8')
   const serverBundle = require(resolve('../dist/vue-ssr-server-bundle.json'))
   const clientManifest = require(resolve('../dist/vue-ssr-client-manifest.json'))
+  /**
+   * 第一个参数可以是以下之一：
+   * 绝对路径，指向一个已经构建好的 bundle 文件（.js 或 .json）。必须以 / 开头才会被识别为文件路径。
+   * webpack + vue-server-renderer/server-plugin 生成的 bundle 对象。
+   * JavaScript 代码字符串（不推荐）。
+   */
   renderer = createRenderer(serverBundle, {
-    template,
-    clientManifest
+    template,//模板
+    clientManifest//由 vue-server-renderer/client-plugin 生成的客户端构建 manifest 对象
   })
 } else {
   readyPromise = require(resolve('../build/setup-dev-server'))(
@@ -61,6 +71,7 @@ function render (req, res) {
     title: 'Vue ssr', // default title
     url: req.url
   }
+  //vue实例挂载的内容变成html，返回给客户端
   renderer.renderToString(context, (err, html) => {
     if (err) {
       return handleError(err)

@@ -3,7 +3,7 @@
     Home
     <img src="../static/img/logo-48.png" alt="">
     <el-button type="success">按钮</el-button>
-    <div class="img"></div>
+    <div class="img"></div>  
   </div>
 </template>
 
