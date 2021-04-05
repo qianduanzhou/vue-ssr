@@ -4,6 +4,7 @@ import {
 } from './app'
 import ProgressBar from './components/ProgressBar.vue'
 
+//生成一个vue实例并添加到body里 $mount()执行后才有$el存在
 const bar = Vue.prototype.$bar = new Vue(ProgressBar).$mount()
 document.body.appendChild(bar.$el)
 
