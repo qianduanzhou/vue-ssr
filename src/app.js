@@ -3,11 +3,12 @@ import App from './App.vue'
 import { createRouter } from './router'
 import { createStore } from './store'
 import { sync } from 'vuex-router-sync'
-import {Button} from 'element-ui'
+import {Button, Table, TableColumn, Message} from 'element-ui'
+
+Vue.use(Button).use(Table).use(TableColumn)
+Vue.prototype.$message = Message
 // 导出一个工厂函数，用于创建新的
 // 应用程序、router 和 store 实例
-
-Vue.use(Button)
 export function createApp () {
   const router = createRouter()
   const store = createStore() 

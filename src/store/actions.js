@@ -1,5 +1,6 @@
 import types from './mutation-types'
-import { fetchItem } from '../request'
+import request from '../request'
+let {fetchItem, getTableData} = request
 export default {
     fetchItem({ commit }, id) {
         // `store.dispatch()` 会返回 Promise，
@@ -14,6 +15,18 @@ export default {
                 id,
                 item
             })
+        })
+    },
+    getTableData({commit}) {
+        return getTableData().then(data => {
+            commit(types.SETTABLEDATA, {
+                data
+            })
+        })
+    },
+    clearTableData({commit}) {
+        commit(types.SETTABLEDATA, {
+            data: null
         })
     }
 }

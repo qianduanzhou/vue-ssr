@@ -64,7 +64,7 @@ let config = {
                     options: {//url-loader相关配置
 						outputPath: 'assets/img',//输出图片的地址，相对于output.path
     					publicPath: '../dist/assets/img',//图片的服务地址
-                        limit: 1000,//文件大小低于limit时将图片打包在js中，生成base64
+                        limit: 3000,//文件大小低于limit时将图片打包在js中，生成base64
 						esModule: false, // 这里设置为false，显示图片地址
 						name: '[name].[ext]?[hash]',//生成图片的名字
                     }

@@ -1,3 +1,4 @@
 export default {
-    SETITEM: 'setItem'
+    SETITEM: 'setItem',
+    SETTABLEDATA: 'setTableData'
 }
