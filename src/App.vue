@@ -2,13 +2,13 @@
 	<div id="app">
 		<div class="block">
 			<p>vue路由跳转</p>
-			<el-button type="primary" @click="$router.push('/')">Home</el-button>
+			<el-button type="primary" @click="$router.push('/')">Index</el-button>
 			<el-button type="warning" @click="$router.push('/item/init')">Item-init</el-button>
 			<el-button type="danger" @click="$router.push('/item/get')">Item-get</el-button>
 		</div>
 		<div class="block">
 			<p>a标签跳转</p>
-			<a href="/">Home</a>
+			<a href="/">Index</a>
 			<a href="/item/init">Item-init</a>
 			<a href="/item/get">Item-get</a>
 			<a href="/no">404</a>

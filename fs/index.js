@@ -92,7 +92,7 @@ function reWriteRouter() {
         newFile = newFile.replace(/routes: \[([\s\S]+)?\]/m, `routes: ${replaceStr}`)
         console.log('newFile')
         console.log(newFile)
-        fs.writeFile(path.resolve(__dirname, 'result.js') , newFile, 'utf8', (err) => {
+        fs.writeFile(path.resolve(__dirname, '../src/router/index.js') , newFile, 'utf8', (err) => {
             if (err) throw err;
             console.log('success done');
         });
