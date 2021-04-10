@@ -66,12 +66,10 @@ function getRoutes(path, fileTree) {
             routePath = splitPaths.join('/')
             if(fileName == 'index') {
                 route.path = routePath
-                route.component = () => import(`view${path}${file}`)
-                route.fileUrl = `view${path}${file}`
+                route.component = `() => import('view${path}${file}')`
             } else {
                 route.path = routePath + fileName
-                route.component = () => import(`view${path}${file}`)
-                route.fileUrl = `view${path}${file}`
+                route.component = `() => import('view${path}${file}')`
             }
             routes.push(route)
         } else {
@@ -81,7 +79,27 @@ function getRoutes(path, fileTree) {
         }
     })
 }
+function reWriteRouter() {
+    fs.readFile(path.resolve(__dirname, '../src/router/index.js'), 'utf-8', (err, file) => {
+        if(err) {
+            console.log('err', err)
+            return
+        }
+        console.log('file', file)
+        let newFile = file
+        let replaceStr = JSON.stringify(routes,null,"\t\t")
+        replaceStr = replaceStr.replace(/"component": "(.+?)"/g, `"component": $1`)
+        newFile = newFile.replace(/routes: \[([\s\S]+)?\]/m, `routes: ${replaceStr}`)
+        console.log('newFile')
+        console.log(newFile)
+        fs.writeFile(path.resolve(__dirname, 'result.js') , newFile, 'utf8', (err) => {
+            if (err) throw err;
+            console.log('success done');
+        });
+    })
+}
 readDir('../src/view', fileTree)
 console.log('fileTree',JSON.stringify(fileTree))
 getRoutes('/', fileTree)
-console.log('routes', routes)
+console.log('routes', JSON.stringify(routes))
+reWriteRouter()
