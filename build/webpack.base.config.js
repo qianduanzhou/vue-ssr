@@ -10,7 +10,6 @@ const resolve = file => path.resolve(__dirname, file)
 // 这样我们在开发过程中仍然可以热重载
 const isProduction = process.env.NODE_ENV === 'production'
 const isAnalyzer = process.env.ANALYZER === 'true'
-
 //文件内容替换
 function replaceUrl(text) {
 	let result = ''
@@ -18,7 +17,6 @@ function replaceUrl(text) {
 	result = result.replace(/\.\.\/dist/g, '..')
 	return result
 }
-
 let config = {
 	//启用webpack内置的优化,有'production'和'development'两个选项，将会添加不同的plugin，具体看webpack4官方文档
 	mode: isProduction ? 'production' : 'development',

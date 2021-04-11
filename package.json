@@ -4,13 +4,13 @@
   "description": "ssr demo",
   "main": "index.js",
   "scripts": {
-    "dev": "node server/index",
+    "dev": "cross-env RENDER_ROUTER=false node server/index",
     "start": "cross-env NODE_ENV=production node server/index",
     "build": "rimraf dist && npm run build:client && npm run build:server",
+    "build:renderRouter": "cross-env FIRST_RENDER=true node fs/index && rimraf dist && npm run build:client && npm run build:server",
     "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.client.config.js --progress",
     "build:server": "cross-env NODE_ENV=production webpack --config build/webpack.server.config.js --progress",
-    "build:analyzer": "cross-env NODE_ENV=production ANALYZER=true webpack --config build/webpack.client.config.js --progress",
-    "postinstall": "npm run build"
+    "build:analyzer": "cross-env NODE_ENV=production ANALYZER=true webpack --config build/webpack.client.config.js --progress"
   },
   "author": "zhou",
   "license": "ISC",

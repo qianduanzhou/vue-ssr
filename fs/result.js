@@ -36,5 +36,5 @@ export function createRouter () {
 				"component": () => import('view/Item.vue')
 		}
 ]
-  })
-}
+  })       
+} 

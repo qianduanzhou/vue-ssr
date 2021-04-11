@@ -26,7 +26,7 @@
 				</el-table-column>
 			</el-table>
 		</template>
-	</div>
+	</div> 
 </template>
 
 <script>

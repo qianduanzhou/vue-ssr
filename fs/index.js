@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const fistRender = process.env.FIRST_RENDER === 'true'//是否立即执行
 let fileTree = [],routes = []
 
 function readDir(dir, fileTree, fileKey) {
@@ -9,7 +10,6 @@ function readDir(dir, fileTree, fileKey) {
             let childFileDir = `${dir}\\${file}`
             let stat = fs.statSync(path.resolve(__dirname, childFileDir))
             if(stat.isDirectory()) {
-                console.log('isDirectory', file)
                 let treeKey = file.split('.')[0]
 
                 if(fileKey) {
@@ -29,7 +29,6 @@ function readDir(dir, fileTree, fileKey) {
                     readDir(childFileDir, fileTree, treeKey)
                 }
             } else {
-                console.log('noDirectory', file)
                 if(file.includes('.vue')) {
                     if(fileKey) {
                         fileTree.forEach(v => {
@@ -54,12 +53,10 @@ function getRoutes(path, fileTree) {
         let route = { path: '', component: null }
         if(Object.prototype.toString.call(file) === '[object String]') {
             let fileName = file.split('.')[0]
-            console.log('fileName', fileName)
             let routePath = (path[path.length - 1] == '/' && path.length > 1 && fileName == 'index') ? path.slice(0, path.length - 1) : path
             let splitPaths = routePath.split('/')
             splitPaths.forEach((s,i) => {
                 if(s[0] == '_') {
-                    console.log('s', s)
                     splitPaths[i] = s.replace(/_/,':')
                 }
             })
@@ -80,26 +77,23 @@ function getRoutes(path, fileTree) {
     })
 }
 function reWriteRouter() {
-    fs.readFile(path.resolve(__dirname, '../src/router/index.js'), 'utf-8', (err, file) => {
-        if(err) {
-            console.log('err', err)
-            return
-        }
-        console.log('file', file)
+    try {
+        let file = fs.readFileSync(path.resolve(__dirname, '../src/router/index.js'), 'utf-8')
         let newFile = file
         let replaceStr = JSON.stringify(routes,null,"\t\t")
         replaceStr = replaceStr.replace(/"component": "(.+?)"/g, `"component": $1`)
         newFile = newFile.replace(/routes: \[([\s\S]+)?\]/m, `routes: ${replaceStr}`)
-        console.log('newFile')
-        console.log(newFile)
-        fs.writeFile(path.resolve(__dirname, '../src/router/index.js') , newFile, 'utf8', (err) => {
-            if (err) throw err;
-            console.log('success done');
-        });
-    })
+        fs.writeFileSync(path.resolve(__dirname, '../src/router/index.js') , newFile, 'utf8')
+        console.log('success done');
+    } catch (error) {
+        console.log('error', error);
+    }
 }
-readDir('../src/view', fileTree)
-console.log('fileTree',JSON.stringify(fileTree))
-getRoutes('/', fileTree)
-console.log('routes', JSON.stringify(routes))
-reWriteRouter()
+fistRender && main()
+function main() {
+    fileTree = [],routes = []
+    readDir('../src/view', fileTree)
+    getRoutes('/', fileTree)
+    reWriteRouter()
+}
+module.exports = main

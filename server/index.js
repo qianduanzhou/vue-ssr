@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const favicon = require('serve-favicon')//网页图标
 const path = require('path')
+const writeRouter = require('../fs/index')
 /**
  * 服务端渲染的关键
  * https://ssr.vuejs.org/zh/api/
@@ -13,8 +14,10 @@ const templatePath = resolve('../src/index.template.html')
 const serverInfo =
   `express/${require('express/package.json').version} ` +
   `vue-server-renderer/${require('vue-server-renderer/package.json').version}`
-const isProd = process.env.NODE_ENV === 'production'
+const isProd = process.env.NODE_ENV === 'production'//判断是否是生成环境
+const renderRouter = process.env.RENDER_ROUTER === 'true'//是否执行动态路由表
 
+renderRouter && writeRouter()//路由写入方法
 //静态目录配置
 const serve = (path, cache) => express.static(resolve(path), {
   maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 30 : 0

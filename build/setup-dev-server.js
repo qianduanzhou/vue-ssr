@@ -6,12 +6,14 @@ const chokidar = require('chokidar')//封装 Node.js 监控文件系统文件变
 const clientConfig = require('./webpack.client.config')
 const serverConfig = require('./webpack.server.config')
 const mfs = new MFS()
+const writeRouter = require('../fs/index')
+const renderRouter = process.env.RENDER_ROUTER === 'true'//是否执行动态路由表
 const readFile = (fs, file) => {
   try {
     return fs.readFileSync(path.join(clientConfig.output.path, file), 'utf-8')
   } catch (e) {}
 }
-
+let isFirstRender = true //判断是否是第一次渲染，由于chokidar监听add事件第一次会监听所有文件的新增，所有需要排除掉第一次
 module.exports = function setupDevServer (app, templatePath, cb) {
   let bundle
   let template
@@ -22,6 +24,7 @@ module.exports = function setupDevServer (app, templatePath, cb) {
   const update = () => {
     if (bundle && clientManifest) {//文件更新后且两个文件存在时resolve，并执行回调
       ready()
+      isFirstRender = false
       cb(bundle, {
         template,
         clientManifest
@@ -36,7 +39,18 @@ module.exports = function setupDevServer (app, templatePath, cb) {
     console.log('index.html template updated.')
     update()
   })
-  
+  chokidar.watch(path.resolve(__dirname,'../src/view')).on('add', () => {//监听view文件下的新增
+    if(!isFirstRender) {
+      renderRouter && writeRouter()//路由写入方法
+      update()
+    }
+  })
+  chokidar.watch(path.resolve(__dirname,'../src/view')).on('unlink', () => {//监听view文件下的删除
+    if(!isFirstRender) {
+      renderRouter && writeRouter()//路由写入方法
+      update()
+    }
+  })
   /**
    * https://github.com/webpack-contrib/webpack-hot-middleware
    * 添加热重载及相关参数 noInfo：不输出相关信息 reload：自动更新
