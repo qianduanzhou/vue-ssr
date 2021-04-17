@@ -19,6 +19,7 @@ export default context => {
     router.push(context.url)
     // 等到 router 将可能的异步组件和钩子函数解析完
     router.onReady(() => {
+      //获取匹配的路由，返回一个数组，里面包含所有匹配的路由，命名视图可能会有多个匹配到的路由
       const matchedComponents = router.getMatchedComponents()
       // 匹配不到的路由，执行 reject 函数，并返回 404
       if (!matchedComponents.length) {
@@ -44,7 +45,7 @@ export default context => {
          */
         context.state = store.state
         // Promise 应该 resolve 应用程序实例，以便它可以渲染
-        resolve(app)
+        resolve(app) 
       }).catch(reject)
     }, reject)
   })

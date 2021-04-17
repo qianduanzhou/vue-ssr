@@ -13,7 +13,7 @@ const {
     router,
     store
 } = createApp()
-
+//将服务端的state替换客户端的state，保证数据一致性
 if (window.__INITIAL_STATE__) {
     store.replaceState(window.__INITIAL_STATE__)
 }
@@ -59,28 +59,17 @@ Vue.mixin({
         }
     }
 })
-// app.$mount('#app')
 
 //这是第一种方式
 router.onReady(() => {
     router.beforeResolve((to, from, next) => {
         const matched = router.getMatchedComponents(to)
-        const prevMatched = router.getMatchedComponents(from)
-        // 我们只关心非预渲染的组件
-        // 所以我们对比它们，找出两个匹配列表的差异组件
-        let diffed = false
-        const activated = matched.filter((c, i) => {
-            return diffed || (diffed = (prevMatched[i] !== c))
-        })
-
-        if (!activated.length) {
-            return next()
-        }
 
         // 这里如果有加载指示器 (loading indicator)，就触发
         bar.start()
 
-        Promise.all(activated.map(c => {
+        //等待所有匹配到的路由中的asyncData加载完成后跳转
+        Promise.all(matched.map(c => {
             if (c.asyncData) {
                 return c.asyncData({
                     store,
@@ -94,6 +83,5 @@ router.onReady(() => {
             next()
         }).catch(next)
     })
-    //第二种方式app在路由准备好后挂载
     app.$mount('#app')
 })
