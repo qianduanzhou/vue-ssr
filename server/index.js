@@ -35,6 +35,7 @@ if(isProd) {
    * JavaScript 代码字符串（不推荐）。
    */
   renderer = createRenderer(serverBundle, {
+    runInNewContext: false,//bundle 代码将与服务器进程在同一个 global 上下文中运行，所以请留意在应用程序代码中尽量避免修改 global。
     template,//模板
     clientManifest//由 vue-server-renderer/client-plugin 生成的客户端构建 manifest 对象
   })
